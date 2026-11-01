@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffd6b0">
+  <meta name="description" content="Parrot Palm — feed parrots, crack palm seeds, and piece together a treasure map. Common, epic, legendary, and extra tiles.">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Parrot Palm">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="css/style.css">
+  <title>Parrot Palm</title>
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="brand">
+        <button type="button" class="logo" id="logo" aria-label="Dance party"></button>
+        <h1>Parrot <span>Palm</span></h1>
+      </div>
+      <div class="pills">
+        <button type="button" class="pill" id="seedPill" aria-label="Seeds in your pouch">🌱 <b id="seedCount">0</b></button>
+        <button type="button" class="pill" id="mapPill" aria-label="Map progress">🗺️ <b id="mapCount">0</b>/<span id="mapTotal">16</span></button>
+      </div>
+      <nav class="actions" aria-label="Game">
+        <button type="button" class="btn nav-btn top-views" data-view="grove" aria-pressed="true">Grove</button>
+        <button type="button" class="btn nav-btn top-views" data-view="map" aria-pressed="false">Map</button>
+        <button type="button" class="btn nav-btn top-views" data-view="album" aria-pressed="false">Album</button>
+        <button type="button" class="btn icon" id="btnMute" aria-pressed="false" aria-label="Mute sounds">🔇</button>
+        <button type="button" class="btn icon" id="btnMenu" aria-label="Settings">⚙️</button>
+        <button type="button" class="btn chain-btn" id="btnWallet" hidden aria-label="Connect a Starknet wallet (optional)"><span class="lbl" id="btnWalletLbl">Connect</span></button>
+      </nav>
+    </header>
+
+    <main>
+      <section id="viewGrove" class="view grove" data-island="coconut" aria-label="Palm grove">
+        <div class="scene">
+          <div class="sky-layer">
+            <div class="sun-orb" aria-hidden="true"></div>
+            <div class="moon-orb" aria-hidden="true"></div>
+            <div class="clouds" aria-hidden="true"><span></span><span></span><span></span></div>
+            <div class="sparkles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="fireflies" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+          </div>
+          <div class="sea-layer" aria-hidden="true">
+            <div class="wave w1"></div>
+            <div class="wave w2"></div>
+            <div class="fish"></div>
+          </div>
+          <div class="sand-layer" aria-hidden="true">
+            <div class="foliage left"></div>
+            <div class="foliage right"></div>
+            <div class="flowers"></div>
+            <div class="crab"></div>
+            <div class="butterflies"><i></i><i></i></div>
+          </div>
+          <div class="palm-stage">
+            <div class="branches" aria-hidden="true"></div>
+            <button type="button" id="btnPalm" class="palm-btn" aria-label="Collect ripe seeds from the palm">
+              <span id="palmArt"></span>
+              <span id="ripeBadge" class="ripe-badge"></span>
+            </button>
+            <div class="perches" id="parrots"></div>
+            <button type="button" id="btnGift" class="gift-btn" hidden>A little gift</button>
+            <p id="growNote" class="grow-note"></p>
+          </div>
+        </div>
+        <div class="grove-hud">
+          <p class="grove-tip" id="groveTip">Tap a parrot to share a seed. Every seed hides a piece of the island picture.</p>
+          <div id="coach" class="coach" hidden>
+            <img class="coach-bird" src="img/parrot-mango.webp" alt="">
+            <span class="step" id="coachStep">1 / 4</span>
+            <p id="coachText"></p>
+            <button type="button" class="btn" id="coachSkip">Skip</button>
+            <button type="button" class="btn primary" id="coachNext">Next</button>
+          </div>
+          <div class="seed-row" id="seedRow" role="radiogroup" aria-label="Which seed to feed"></div>
+          <button type="button" class="btn steal-btn" id="btnSteal" hidden>A parrot snatched a seed. Tap to take it back.</button>
+          <p class="combo-pill" id="comboPill" hidden></p>
+        </div>
+      </section>
+
+      <section id="viewMap" class="view map-view" aria-label="Treasure map" hidden>
+        <div class="map-head">
+          <h2 id="mapTitle">Coconut Isle</h2>
+          <div class="island-switch" id="islandSwitch" role="tablist" aria-label="Islands"></div>
+          <p class="sub" id="mapSub">Place each piece in its spot.</p>
+          <div class="progress" aria-hidden="true"><div class="bar" id="mapBar"></div></div>
+        </div>
+        <div class="map-board" id="mapBoard" role="grid" aria-label="Map board"></div>
+        <div class="tray" id="tray" aria-label="Tiles waiting to be placed"></div>
+        <p class="tray-empty" id="trayEmpty" hidden>Tiles you own show up here until you place them.</p>
+        <button type="button" class="btn big primary map-done" id="btnTreasure" hidden>See the treasure</button>
+      </section>
+
+      <section id="viewAlbum" class="view album" aria-label="Tile album" hidden>
+        <div class="album-head">
+          <h2>Tile album</h2>
+          <p class="sub" id="albumSub"></p>
+          <div class="progress" aria-hidden="true"><div class="bar" id="albumBar"></div></div>
+        </div>
+        <section class="stickers" aria-label="Sticker book">
+          <h3>Sticker book</h3>
+          <p class="muted">Little prizes for the things you do. A new sticker brings a seed.</p>
+          <div class="sticker-grid" id="stickerGrid"></div>
+        </section>
+        <div class="filters" id="islandFilters" role="tablist" aria-label="Album island"></div>
+        <div class="filters" id="filters" role="radiogroup" aria-label="Filter tiles"></div>
+        <div class="book-grid" id="bookGrid"></div>
+        <p class="book-empty" id="bookEmpty" hidden></p>
+        <section class="nest" aria-label="Trade duplicates">
+          <h3>Duplicate nest</h3>
+          <p class="muted">Spare pieces trade for seeds. You always keep one of each tile.</p>
+          <div id="nestRows"></div>
+        </section>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Sections">
+      <button type="button" class="btn nav-btn" data-view="grove" aria-pressed="true">🌴 Grove</button>
+      <button type="button" class="btn nav-btn" data-view="map" aria-pressed="false">🗺️ Map</button>
+      <button type="button" class="btn nav-btn" data-view="album" aria-pressed="false">📒 Album</button>
+    </nav>
+  </div>
+
+  <div class="modal reveal" id="reveal" role="dialog" aria-modal="true" aria-labelledby="revealName" hidden>
+    <div class="reveal-card">
+      <div class="rays" aria-hidden="true"></div>
+      <p class="rarity-badge" id="revealRarity"></p>
+      <div class="reveal-art" id="revealArt"></div>
+      <h2 id="revealName"></h2>
+      <p id="revealBlurb"></p>
+      <p id="revealDupe" class="muted"></p>
+      <div class="row">
+        <button type="button" class="btn big primary" id="revealOk">Sweet ♡</button>
+        <button type="button" class="btn big" id="revealPlace">To the tray</button>
+      </div>
+      <p class="mint-status" id="revealMintStatus" role="status"></p>
+      <button type="button" class="btn wide chain" id="revealMint" hidden>✦ Mint on Starknet</button>
+    </div>
+  </div>
+
+  <div class="modal" id="detail" role="dialog" aria-modal="true" aria-labelledby="detailName" hidden>
+    <div class="sheet small">
+      <button type="button" class="btn icon close" data-close aria-label="Close">✕</button>
+      <p class="rarity-badge" id="detailRarity"></p>
+      <div class="detail-art" id="detailArt"></div>
+      <h2 id="detailName"></h2>
+      <p id="detailBlurb"></p>
+      <p id="detailCount" class="muted"></p>
+      <div class="row">
+        <button type="button" class="btn primary" id="detailPlace">Find its spot</button>
+      </div>
+      <p class="mint-status" id="detailMintStatus" role="status"></p>
+      <button type="button" class="btn wide chain" id="detailMint" hidden>✦ Mint on Starknet</button>
+    </div>
+  </div>
+
+  <div class="modal" id="treasure" role="dialog" aria-modal="true" aria-labelledby="treasureTitle" hidden>
+    <div class="sheet small">
+      <button type="button" class="btn icon close" data-close aria-label="Close">✕</button>
+      <p class="rarity-badge extra">The map is whole</p>
+      <div class="detail-art big" id="treasureArt"></div>
+      <h2 id="treasureTitle">Coco’s Heart</h2>
+      <p id="treasureBlurb">The red X was never a mark to dig. It was the parrots drawing a heart. Under the last seed: a ruby that purrs when the island is complete.</p>
+      <p id="treasureNext" class="muted"></p>
+      <div class="row">
+        <button type="button" class="btn big primary" data-close>Stay a while ♡</button>
+      </div>
+      <p class="mint-status" id="chartMintStatus" role="status"></p>
+      <button type="button" class="btn wide chain" id="chartMint" hidden>✦ Mint the chart</button>
+    </div>
+  </div>
+
+  <div class="modal" id="how" role="dialog" aria-modal="true" aria-labelledby="howTitle" hidden>
+    <div class="sheet">
+      <button type="button" class="btn icon close" data-close aria-label="Close">✕</button>
+      <h2 id="howTitle">How to play</h2>
+      <ol>
+        <li>Tap the palm to pocket ripe seeds. A new one grows every 20 seconds, up to three on the tree. Finishing an island makes the next one grow a little faster.</li>
+        <li>Pick a seed, then tap a parrot. They crack it and reveal a map tile.</li>
+        <li>New tiles wait in the tray. Drag one onto its spot, or tap it and then tap the slot. Auto-place all is there if you want it. Sixteen spots finish an island.</li>
+        <li>Duplicates visit the nest in the album and come back as more seeds. Two common spares make one plain seed.</li>
+      </ol>
+      <p>A plain seed shared with Mango lands on these rarities. Pip favors epic pieces. Nova leans legendary, and finds the extra tile a little more often. Lucky and golden seeds (from the nest) shift the odds upward. Extra is the rarest tier, and Flower Nook is the rarest single piece.</p>
+      <table class="odds">
+        <thead>
+          <tr><th>Seed</th><th>Common</th><th>Epic</th><th>Legendary</th><th>Extra</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Plain · Mango</td><td>70%</td><td>20%</td><td>8%</td><td>2%</td></tr>
+          <tr><td>Plain · Pip</td><td>64%</td><td>26%</td><td>8%</td><td>2%</td></tr>
+          <tr><td>Plain · Nova</td><td>66%</td><td>20%</td><td>11%</td><td>3%</td></tr>
+          <tr><td>Lucky · Mango</td><td>40%</td><td>35%</td><td>18%</td><td>7%</td></tr>
+          <tr><td>Golden · Mango</td><td>0%</td><td>45%</td><td>40%</td><td>15%</td></tr>
+        </tbody>
+      </table>
+      <p class="muted">Seeds open the island you have selected. If a streak brings nothing new, later seeds lean toward the missing common, epic, and legendary pieces. That island’s extra tile gets likelier after 16 opens without it, and is promised by the 40th. Finishing Coconut Isle invites Lulu and opens Starfruit Atoll. Finishing that invites Sol and opens Moonpearl Cay. Progress stays on this device. A Starknet wallet is optional.</p>
+      <button type="button" class="btn big primary" data-close>Let’s crack seeds</button>
+    </div>
+  </div>
+
+  <div class="modal" id="menu" role="dialog" aria-modal="true" aria-labelledby="menuTitle" hidden>
+    <div class="sheet small">
+      <button type="button" class="btn icon close" data-close aria-label="Close settings">✕</button>
+      <h2 id="menuTitle">Settings</h2>
+      <p class="muted">Parrot Palm saves on this device automatically.</p>
+      <div class="stats" id="statBox"></div>
+      <button type="button" class="btn wide toggle-btn" id="btnMusic" aria-pressed="false">🎵 Cozy music <span class="state">Off</span></button>
+      <button type="button" class="btn wide toggle-btn" id="btnCalm" aria-pressed="false">🫧 Gentle mode <span class="state">Off</span></button>
+      <button type="button" class="btn wide" id="btnHow">How to play</button>
+      <button type="button" class="btn wide" id="btnWalletSettings">✦ Starknet wallet (optional)</button>
+      <button type="button" class="btn wide" id="btnInstall" hidden>📲 Add to Home Screen</button>
+      <p class="muted" id="installNote" hidden>Opens like a little app and plays offline after the first load.</p>
+      <button type="button" class="btn wide" id="btnReset">Erase progress</button>
+    </div>
+  </div>
+
+  <div class="modal" id="installHelp" role="dialog" aria-modal="true" aria-labelledby="installTitle" hidden>
+    <div class="sheet small">
+      <button type="button" class="btn icon close" data-close aria-label="Close">✕</button>
+      <h2 id="installTitle">Add to Home Screen</h2>
+      <p>In Safari, tap Share, then <b>Add to Home Screen</b>. Parrot Palm keeps your album on this device.</p>
+      <button type="button" class="btn big primary" data-close>Got it</button>
+    </div>
+  </div>
+
+  <div class="modal" id="wallets" role="dialog" aria-modal="true" aria-labelledby="walletsTitle" hidden>
+    <div class="sheet small">
+      <button type="button" class="btn icon close" data-close aria-label="Close">✕</button>
+      <h2 id="walletsTitle">Starknet</h2>
+      <p class="muted" id="walletsNet"></p>
+      <div id="walletList"></div>
+    </div>
+  </div>
+
+  <div class="modal" id="chainPanel" role="dialog" aria-modal="true" aria-labelledby="chainTitle" hidden>
+    <div class="sheet small" id="chainSheet">
+      <button type="button" class="btn icon close" data-close aria-label="Close">✕</button>
+      <h2 id="chainTitle">Your keepsakes</h2>
+      <div id="chainBody"></div>
+    </div>
+  </div>
+
+  <div id="crack" class="crack" hidden><div class="crack-seed"></div><i class="shell"></i><i class="shell"></i><i class="shell"></i><i class="shell"></i></div>
+  <button type="button" id="floaty" class="floaty" hidden aria-label="A little surprise"></button>
+  <div id="hearts" class="hearts" aria-hidden="true"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="fx" id="fx" aria-hidden="true"></div>
+  <div class="sr-only" id="announce" aria-live="polite"></div>
+  <noscript><p class="noscript">Parrot Palm needs JavaScript to crack seeds and save your map.</p></noscript>
+
+  <script src="js/logic.js"></script>
+  <script src="js/maps.js"></script>
+  <script src="js/art.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/install.js"></script>
+  <script src="js/starknet-config.js"></script>
+  <script src="js/starknet-abi.js"></script>
+  <script src="js/starknet.js"></script>
+</body>
+</html>
