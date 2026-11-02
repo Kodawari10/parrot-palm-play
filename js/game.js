@@ -16,7 +16,6 @@
   let detailId = null;
   let held = null;
   let toastTimer = 0;
-  const chain = { tiles: new Set(), chart: false };
 
   function readRaw() {
     try { return localStorage.getItem(L.CFG.storeKey); } catch (e) { return null; }
@@ -488,7 +487,7 @@
       const owned = L.hasTile(state, tile.id);
       const b = document.createElement('button');
       b.type = 'button';
-      b.className = 'book-cell' + (owned ? '' : ' missing') + (chain.tiles.has(tile.n) ? ' onchain' : '');
+      b.className = 'book-cell' + (owned ? '' : ' missing');
       b.innerHTML = '<span class="art"></span><span class="lbl"></span>';
       b.querySelector('.art').innerHTML = ART.tile(tile, !owned);
       b.querySelector('.lbl').textContent = tile.name;
@@ -713,11 +712,6 @@
       : 'Duplicate ×' + count + ' · ' + (count - 1) + ' spare' + (count > 2 ? 's' : '') + '. The nest can trade them.';
     const placed = !!(state.placed && state.placed[tile.id]);
     $('#revealPlace').hidden = placed;
-    const mint = $('#revealMint');
-    const rare = tile.rarity === 'legendary' || tile.rarity === 'extra';
-    mint.hidden = !rare;
-    $('#revealMintStatus').textContent = '';
-    if (rare) paintMintButton(mint, tile);
     openModal('reveal');
     if (tile.rarity === 'legendary' || tile.rarity === 'extra') {
       confetti(tile.rarity === 'extra' ? 48 : 28);
@@ -725,14 +719,6 @@
     }
     announce((result.isNew ? 'New tile, ' : 'Duplicate, ') + tile.name + ', ' + L.RARITY_LABEL[tile.rarity]);
     document.dispatchEvent(new CustomEvent('pp:reveal', { detail: { id: tile.id, n: tile.n, rarity: tile.rarity } }));
-  }
-
-  function paintMintButton(btn, tile) {
-    if (!btn) return;
-    const minted = chain.tiles.has(tile.n);
-    if (minted) { btn.hidden = true; return; }
-    btn.hidden = false;
-    btn.textContent = '✦ Mint on Starknet';
   }
 
   function doPlace(id, already) {
@@ -898,11 +884,6 @@
     $('#detailCount').textContent = (owned ? 'Owned ×' + count + '. ' : '') + where;
     const place = $('#detailPlace');
     place.hidden = !owned || !!(state.placed && state.placed[tile.id]);
-    const mint = $('#detailMint');
-    const rare = owned && (tile.rarity === 'legendary' || tile.rarity === 'extra');
-    mint.hidden = !rare || chain.tiles.has(tile.n);
-    $('#detailMintStatus').textContent = '';
-    if (rare) paintMintButton(mint, tile);
   }
 
   function openTreasure(isle, result) {
@@ -922,9 +903,6 @@
     state.seenPrize = Object.assign({}, state.seenPrize, { [here.id]: true });
     state.celebrated = !!state.seenPrize.coconut;
     save();
-    const minted = chain.chart;
-    $('#chartMint').hidden = minted || here.id !== 'coconut';
-    $('#chartMintStatus').textContent = '';
     openModal('treasure');
     announce(here.name + ' is complete. You found ' + here.prize + '.');
   }
@@ -992,11 +970,6 @@
       renderAll();
       toast('A fresh island. The parrots forgot, kindly.');
     });
-    $('#btnWalletSettings').addEventListener('click', () => {
-      const w = $('#btnWallet');
-      if (w && !w.hidden) w.click();
-      else toast('The wallet button is optional. The game is ready without it.');
-    });
     $('#revealOk').addEventListener('click', () => closeModal('reveal'));
     $('#revealPlace').addEventListener('click', () => {
       closeModal('reveal');
@@ -1011,9 +984,6 @@
     $('#btnTreasure').addEventListener('click', () => openTreasure(L.activeIsland(state)));
     $('#coachNext').addEventListener('click', () => { advanceCoach(state.coach); });
     $('#coachSkip').addEventListener('click', () => { state.coach = 4; state.onboarded = true; save(); renderCoach(); });
-    $('#revealMint').addEventListener('click', () => requestMint('tile', revealTile));
-    $('#detailMint').addEventListener('click', () => requestMint('tile', L.byId[detailId]));
-    $('#chartMint').addEventListener('click', () => requestMint('chart', null));
     document.body.addEventListener('click', e => {
       const b = e.target.closest('[data-close]');
       if (!b) return;
@@ -1038,24 +1008,6 @@
       else if (e.key === 'a' || e.key === 'A') showView('album');
       else if (e.key === '?') openModal('how');
     });
-  }
-
-  function requestMint(kind, tile) {
-    if (!window.PP_CHAIN) {
-      toast('Collectibles are optional. Your tiles stay in the album.');
-      return;
-    }
-    if (kind === 'chart') window.PP_CHAIN.mintChart($('#chartMintStatus'));
-    else window.PP_CHAIN.mintTile(tile, kind === 'tile' && revealTile && tile && tile.id === revealTile.id ? $('#revealMintStatus') : $('#detailMintStatus'));
-  }
-
-  function setChain(info) {
-    chain.tiles = new Set(info && info.tiles || []);
-    chain.chart = !!(info && info.chart);
-    if (view === 'album') renderAlbum();
-    if (!$('#detail').hidden) paintDetail();
-    if (revealTile) paintMintButton($('#revealMint'), revealTile);
-    if (!$('#treasure').hidden && chain.chart) $('#chartMint').hidden = true;
   }
 
   let floatTimer = 0;
@@ -1130,7 +1082,6 @@
     }
     window.PP_GAME = {
       getState: () => state,
-      setChain: setChain,
       ui: { toast: toast, announce: announce, openModal: openModal, closeModal: closeModal, confetti: confetti },
       isComplete: () => L.isComplete(state),
       showView: showView

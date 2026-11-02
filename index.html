@@ -31,7 +31,6 @@
         <button type="button" class="btn nav-btn top-views" data-view="album" aria-pressed="false">Album</button>
         <button type="button" class="btn icon" id="btnMute" aria-pressed="false" aria-label="Mute sounds">🔇</button>
         <button type="button" class="btn icon" id="btnMenu" aria-label="Settings">⚙️</button>
-        <button type="button" class="btn chain-btn" id="btnWallet" hidden aria-label="Connect a Starknet wallet (optional)"><span class="lbl" id="btnWalletLbl">Connect</span></button>
       </nav>
     </header>
 
@@ -138,8 +137,6 @@
         <button type="button" class="btn big primary" id="revealOk">Sweet ♡</button>
         <button type="button" class="btn big" id="revealPlace">To the tray</button>
       </div>
-      <p class="mint-status" id="revealMintStatus" role="status"></p>
-      <button type="button" class="btn wide chain" id="revealMint" hidden>✦ Mint on Starknet</button>
     </div>
   </div>
 
@@ -154,8 +151,6 @@
       <div class="row">
         <button type="button" class="btn primary" id="detailPlace">Find its spot</button>
       </div>
-      <p class="mint-status" id="detailMintStatus" role="status"></p>
-      <button type="button" class="btn wide chain" id="detailMint" hidden>✦ Mint on Starknet</button>
     </div>
   </div>
 
@@ -170,8 +165,6 @@
       <div class="row">
         <button type="button" class="btn big primary" data-close>Stay a while ♡</button>
       </div>
-      <p class="mint-status" id="chartMintStatus" role="status"></p>
-      <button type="button" class="btn wide chain" id="chartMint" hidden>✦ Mint the chart</button>
     </div>
   </div>
 
@@ -198,7 +191,7 @@
           <tr><td>Golden · Mango</td><td>0%</td><td>45%</td><td>40%</td><td>15%</td></tr>
         </tbody>
       </table>
-      <p class="muted">Seeds open the island you have selected. If a streak brings nothing new, later seeds lean toward the missing common, epic, and legendary pieces. That island’s extra tile gets likelier after 16 opens without it, and is promised by the 40th. Finishing Coconut Isle invites Lulu and opens Starfruit Atoll. Finishing that invites Sol and opens Moonpearl Cay. Progress stays on this device. A Starknet wallet is optional.</p>
+      <p class="muted">Seeds open the island you have selected. If a streak brings nothing new, later seeds lean toward the missing common, epic, and legendary pieces. That island’s extra tile gets likelier after 16 opens without it, and is promised by the 40th. Finishing Coconut Isle invites Lulu and opens Starfruit Atoll. Finishing that invites Sol and opens Moonpearl Cay. Progress stays on this device.</p>
       <button type="button" class="btn big primary" data-close>Let’s crack seeds</button>
     </div>
   </div>
@@ -212,7 +205,6 @@
       <button type="button" class="btn wide toggle-btn" id="btnMusic" aria-pressed="false">🎵 Cozy music <span class="state">Off</span></button>
       <button type="button" class="btn wide toggle-btn" id="btnCalm" aria-pressed="false">🫧 Gentle mode <span class="state">Off</span></button>
       <button type="button" class="btn wide" id="btnHow">How to play</button>
-      <button type="button" class="btn wide" id="btnWalletSettings">✦ Starknet wallet (optional)</button>
       <button type="button" class="btn wide" id="btnInstall" hidden>📲 Add to Home Screen</button>
       <p class="muted" id="installNote" hidden>Opens like a little app and plays offline after the first load.</p>
       <button type="button" class="btn wide" id="btnReset">Erase progress</button>
@@ -228,22 +220,6 @@
     </div>
   </div>
 
-  <div class="modal" id="wallets" role="dialog" aria-modal="true" aria-labelledby="walletsTitle" hidden>
-    <div class="sheet small">
-      <button type="button" class="btn icon close" data-close aria-label="Close">✕</button>
-      <h2 id="walletsTitle">Starknet</h2>
-      <p class="muted" id="walletsNet"></p>
-      <div id="walletList"></div>
-    </div>
-  </div>
-
-  <div class="modal" id="chainPanel" role="dialog" aria-modal="true" aria-labelledby="chainTitle" hidden>
-    <div class="sheet small" id="chainSheet">
-      <button type="button" class="btn icon close" data-close aria-label="Close">✕</button>
-      <h2 id="chainTitle">Your keepsakes</h2>
-      <div id="chainBody"></div>
-    </div>
-  </div>
 
   <div id="crack" class="crack" hidden><div class="crack-seed"></div><i class="shell"></i><i class="shell"></i><i class="shell"></i><i class="shell"></i></div>
   <button type="button" id="floaty" class="floaty" hidden aria-label="A little surprise"></button>
@@ -259,8 +235,5 @@
   <script src="js/audio.js"></script>
   <script src="js/game.js"></script>
   <script src="js/install.js"></script>
-  <script src="js/starknet-config.js"></script>
-  <script src="js/starknet-abi.js"></script>
-  <script src="js/starknet.js"></script>
 </body>
 </html>

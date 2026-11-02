@@ -1,5 +1,5 @@
-/* Offline cache for Parrot Palm. Cross-origin calls (wallet RPC) are never cached. */
-const CACHE = 'parrot-palm-v6';
+/* Offline cache for Parrot Palm. Only same-origin files are cached. */
+const CACHE = 'parrot-palm-v7';
 const FILES = [
   './',
   './index.html',
@@ -10,11 +10,6 @@ const FILES = [
   './js/audio.js',
   './js/game.js',
   './js/install.js',
-  './js/starknet-config.js',
-  './js/starknet-abi.js',
-  './js/starknet.js',
-  './js/vendor/get-starknet-core.js',
-  './js/vendor/starkzap.js',
   './manifest.webmanifest',
   './icons/icon-192.png',
   './icons/icon-512.png',

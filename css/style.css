@@ -56,8 +56,6 @@ button, input { font: inherit; color: inherit; }
 .btn[disabled] { opacity: .55; cursor: default; transform: none; }
 .btn.active, .nav-btn[aria-pressed="true"] { background: linear-gradient(180deg, #fff, #fff4ea); box-shadow: 0 3px 0 #f0b8d4, inset 0 0 0 2px #ffc2dc; }
 .actions { display: flex; gap: 6px; align-items: center; }
-.chain-btn.connected { box-shadow: 0 3px 0 #c9b6ff, var(--shadow); }
-.chain-btn.wrongnet { box-shadow: 0 3px 0 #ffb15a, var(--shadow); }
 
 main { flex: 1; min-height: 0; overflow: auto; position: relative; }
 .view { min-height: 100%; }
@@ -207,7 +205,6 @@ main { flex: 1; min-height: 0; overflow: auto; position: relative; }
 .book-cell .count { position: absolute; right: 6px; top: 6px; background: #ff8fb8; color: #fff; border-radius: 8px; font-size: 10px; font-weight: 900; padding: 1px 5px; }
 .book-cell.missing { background: #f7f0f8; }
 .book-cell.missing .art { opacity: .55; }
-.book-cell.onchain { box-shadow: 0 0 0 2px #b48cff, var(--shadow); }
 .book-empty { text-align: center; color: var(--ink2); font-weight: 800; }
 .pip { font-size: 10px; font-weight: 900; border-radius: 8px; padding: 1px 5px; }
 .pip.common, .rarity-badge.common { background: #e7f8ea; color: #2f8a4e; }
@@ -249,16 +246,10 @@ main { flex: 1; min-height: 0; overflow: auto; position: relative; }
 
 .toast { position: fixed; left: 50%; top: 74px; transform: translateX(-50%) translateY(-8px); background: #4a2f55; color: #fff; padding: 10px 14px; border-radius: 16px; font-weight: 800; opacity: 0; pointer-events: none; transition: .2s; z-index: 40; max-width: min(420px, 92vw); text-align: center; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-.btn.chain { background: linear-gradient(180deg, #f6f1ff, #e4dcff); color: #5b45b0; box-shadow: 0 3px 0 #c9b6ff, var(--shadow); }
 .fx { position: fixed; inset: 0; pointer-events: none; z-index: 35; overflow: hidden; }
 .fx i { position: absolute; top: -10px; width: 10px; height: 14px; border-radius: 3px; animation: fall 1.2s linear forwards; }
 @keyframes fall { to { transform: translateY(100vh) rotate(180deg); opacity: .2; } }
 
-.wallet-opt { text-align: left; }
-.wallet-opt small { display: block; font-weight: 700; color: var(--ink2); }
-.nowallet a { display: flex; margin-top: 6px; }
-.chain-note { background: #fff6ea; border-radius: 14px; padding: 8px 10px; font-weight: 700; color: #8a6240; margin: 8px 0; }
-.mint-status { min-height: 1.2em; font-weight: 800; color: #7a3f8f; }
 .stats { display: flex; gap: 8px; justify-content: center; }
 .stats div { background: #fff; border-radius: 14px; padding: 8px 10px; min-width: 80px; box-shadow: var(--shadow); }
 .stats b { display: block; font-size: 20px; }
@@ -270,9 +261,6 @@ main { flex: 1; min-height: 0; overflow: auto; position: relative; }
   .brand h1 { font-size: 16px; }
   .logo { width: 36px; height: 36px; }
   .pill { padding: 6px 8px; font-size: 13px; }
-  .chain-btn { padding: 8px 10px; }
-  #btnWalletLbl { display: none; }
-  .chain-btn::before { content: "✦"; }
   .bottom-nav {
     display: flex; gap: 6px; padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
     background: #fffafd; box-shadow: 0 -4px 16px rgba(122, 76, 80, .08);
@@ -295,7 +283,6 @@ main { flex: 1; min-height: 0; overflow: auto; position: relative; }
   .toast { top: 64px; }
 }
 @media (max-width: 480px) {
-  #btnWallet { display: none; }
   .pill { padding: 5px 7px; font-size: 12px; }
   .brand { gap: 6px; }
   .brand h1 { font-size: 15px; }
